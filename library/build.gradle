@@ -1,0 +1,110 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'me.tatarka:gradle-retrolambda:2.4.0'
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'retrolambda'
+apply plugin: 'maven'
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def j8Home = properties.getProperty('java8_home')
+def j7Home = properties.getProperty('java7_home')
+def m2dir = properties.getProperty('upload.dir')
+
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    compileSdkVersion 21
+    buildToolsVersion "21.1"
+
+    defaultConfig {
+        applicationId "com.github.daneko.simpleitemanimator"
+        minSdkVersion 15
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            runProguard false
+        }
+    }
+
+    // 一旦checkコマンドを走らせるためにlint時にabortしないようにする
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile 'com.android.support:recyclerview-v7:21.0.0'
+
+    compile 'io.reactivex:rxandroid:0.22.0'
+
+    compile 'org.functionaljava:functionaljava:4.2-beta-1'
+
+    compile 'org.slf4j:slf4j-api:1.7.6'
+
+    compile 'com.google.code.findbugs:jsr305:3.0.0'
+
+    provided 'org.projectlombok:lombok:1.14.8'
+}
+
+retrolambda {
+    jdk j8Home ?: System.getenv("JAVA8_HOME")
+    oldJdk j7Home ?: System.getenv("JAVA7_HOME")
+    javaVersion JavaVersion.VERSION_1_7
+    //jvmArgs '-arg1', '-arg2'
+}
+
+/**
+ * archive
+ */
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.sourceFiles
+}
+
+artifacts {
+    archives androidSourcesJar
+}
+
+def repoPath = m2dir ?: "/tmp"
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri("${repoPath}/repository"))
+            pom.version = '0.0.1-SNAPSHOT'
+            pom.groupId = 'com.github.daneko'
+            pom.artifactId = 'simple-item-animator'
+            pom.project {
+                inceptionYear '2014'
+                packaging 'aar'
+                licenses {
+                    license {
+                        name 'The MIT License'
+                        url 'https://github.com/daneko/SimpleItemAnimator/blob/master/LICENSE.txt'
+                        distribution 'repo'
+                    }
+                }
+                scm {
+                    connection 'scm:https://daneko@github.com/daneko/SimpleItemAnimator'
+                    developerConnection 'scm:daneko@github.com/daneko/SimpleItemAnimator.git'
+                    url 'https://github.com/daneko/SimpleItemAnimator'
+                }
+            }
+        }
+    }
+}
