@@ -56,7 +56,7 @@ recyclerView.setItemAnimator(
 * [JSR305](https://code.google.com/p/jsr-305/) ([license BSD 3](http://opensource.org/licenses/BSD-3-Clause))
 * [slf4j](http://slf4j.org/) ([license MIT](http://slf4j.org/license.html))
 
-and `com.android.support:recyclerview-v7:21.0.0`
+and `com.android.support:recyclerview-v7:21.0.3`
 
 
 
@@ -72,22 +72,6 @@ sdk.dir=/usr/local/opt/android-sdk
 java8_home=/Library/Java/JavaVirtualMachines/jdk1.8.0_20.jdk/Contents/Home
 java7_home=/Library/Java/JavaVirtualMachines/jdk1.7.0_67.jdk/Contents/Home
 ```
-
-### known issue
-
-when app build. occur compile error, like
-
-```
-SimpleItemAnimator/library/src/main/java/com/github/daneko/simpleitemanimator/AbstAnimationExecutor.java:4: error: cannot find symbol
-import android.support.v4.view.ViewPropertyAnimatorListener;
-                              ^
-  symbol:   class ViewPropertyAnimatorListener
-  location: package android.support.v4.view
-1 error
-
- FAILED
-```
-retry compile, and compile success.
 
 ### License
 

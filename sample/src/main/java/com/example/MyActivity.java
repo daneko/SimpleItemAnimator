@@ -24,7 +24,7 @@ import fj.data.Java;
 import fj.data.List;
 import fj.data.Stream;
 
-import rx.android.observables.AndroidObservable;
+import rx.android.app.AppObservable;
 import rx.schedulers.Schedulers;
 
 import lombok.extern.slf4j.Slf4j;
@@ -89,12 +89,12 @@ public class MyActivity extends Activity {
          * アイテムのClickはAdapter内でどうにか頑張ることになるようだ
          * {@link android.widget.ListView#setOnItemClickListener(android.widget.AdapterView.OnItemClickListener)} 的なものは無い
          */
-        AndroidObservable.bindActivity(this, adapter.getItemClickObservable()).
+        AppObservable.bindActivity(this, adapter.getItemClickObservable()).
                 subscribeOn(Schedulers.io()).
                 map(holder -> P.p(holder.getItem(), recyclerView.getChildPosition(holder.getItemView()))).
                 subscribe(clickItem -> adapter.remove(clickItem._2()));
 
-        AndroidObservable.bindActivity(this, adapter.getItemLongClickObservable()).
+        AppObservable.bindActivity(this, adapter.getItemLongClickObservable()).
                 subscribeOn(Schedulers.io()).
                 map(holder -> P.p(holder.getItem(), recyclerView.getChildPosition(holder.getItemView()))).
                 subscribe(clickItem -> adapter.change(clickItem._1().withDescription("change!"), clickItem._2()));
