@@ -31,10 +31,11 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             signingConfig android.signingConfigs.debug
-            runProguard true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'proguard-assumenosideeffects-rules.pro'
         }
     }
